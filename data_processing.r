@@ -96,8 +96,7 @@ test_visibility_sum <- preprocessed_data %>%
 # 
 # full_data_visibility_sum
 ########################################################
-full_data %>% 
-  select(`Item_Type_Health and Hygiene`)
+
 
 #Interaction Variables
 #do we need to center these first?
