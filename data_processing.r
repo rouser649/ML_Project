@@ -70,11 +70,7 @@ full_data <- full_data_dummy %>%
             Outlet_Location_Type, `Outlet_Location_Type_Tier 1`,
             Outlet_Type, `Outlet_Type_Grocery Store`))
 
-train_processed <- full_data[1:nrow(Train),]
-test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
-write_csv(train_processed, file = "train_processed.csv")
-write_csv(test_processed, file = "test_processed.csv")
 
 ########################################################
 ## Verifying that the processing worked well ##
@@ -94,11 +90,11 @@ test_visibility_sum <- preprocessed_data %>%
   group_by(Outlet_Identifier) %>%            
   summarise(total_visibility = sum(Item_Visibility)) 
 
-full_data_visibility_sum <- full_data %>%
-  group_by(Outlet_Identifier) %>%            
-  summarise(total_visibility = sum(Item_Visibility)) 
-
-full_data_visibility_sum
+# full_data_visibility_sum <- full_data %>%
+#   group_by(Outlet_Identifier) %>%            
+#   summarise(total_visibility = sum(Item_Visibility)) 
+# 
+# full_data_visibility_sum
 ########################################################
 full_data %>% 
   select(`Item_Type_Health and Hygiene`)
@@ -126,6 +122,9 @@ mutate(Supermarket_Item_Household=(`Outlet_Type_Supermarket Type1`)*Item_Type_Ho
 mutate(Supermarket_Item_Hygiene=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Health and Hygiene`) )
 
 
+train_processed <- full_data[1:nrow(Train),]
+test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
+write_csv(train_processed, file = "train_processed.csv")
+write_csv(test_processed, file = "test_processed.csv")
 
-write_csv(full_data, file="procesed_data")
