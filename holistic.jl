@@ -3,9 +3,10 @@ using DataFrames
 using Gurobi
 using JuMP
 using Random
+using Statistics
 
 
-train_filepath = "train_processed.csv"
+wtrain_filepath = "train_processed.csv"
 test_filepath = "test_processed.csv"
 
 train = CSV.read(train_filepath, DataFrame)
@@ -14,19 +15,31 @@ test = CSV.read(test_filepath, DataFrame)
 #12 interaction variables added
 
 n,p = size(train)
+
+###############################
+
+# Motivationo for uncertainy set. 
+# Uncertainty on item max retail price.
+# Uncertainty on item fat content
+# Uncertainty on outlet size.
+
+# Uncertainty on Outlet Sales, missing data on unreported stuff/returns. 
+# Uncertainty on visibility. Difficult to accurately know percentage
+
+
+################################
+
+
+
+
+################################################################
+## Get the highly correlated variables ##
+
+cor(train)
+
+cor(train[:,3], train[:,7])
+
 gurobi_env = Gurobi.Env()
-
-#uncertainty on item MRP
-#Uncertainty on item fat content
-#Uncertainty on outlet size
-#Uncertainty on Outlet Sales. 
-
-
-
-
-
-
-
 #function holistic(M, gamma, k,  X, Y, x_test, y_val)
     #Initialize the model.
     model = Model(with_optimizer(Gurobi.Optimizer, gurobi_env))

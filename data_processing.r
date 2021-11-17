@@ -68,7 +68,9 @@ full_data <- full_data_dummy %>%
             Outlet_Identifier, Outlet_Identifier_OUT010,
             Outlet_Size, Outlet_Size_Small,
             Outlet_Location_Type, `Outlet_Location_Type_Tier 1`,
-            Outlet_Type, `Outlet_Type_Grocery Store`))
+            Outlet_Type, `Outlet_Type_Grocery Store`,
+            Item_Identifier,
+            total_visibility, num_zero))
 
 
 
@@ -127,3 +129,9 @@ test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 write_csv(train_processed, file = "train_processed.csv")
 write_csv(test_processed, file = "test_processed.csv")
 
+
+source("http://www.sthda.com/upload/rquery_cormat.r")
+
+library(corrplot)
+# rquery.cormat(full_data)
+# full_data
