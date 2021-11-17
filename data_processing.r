@@ -70,7 +70,11 @@ full_data <- full_data_dummy %>%
             Outlet_Location_Type, `Outlet_Location_Type_Tier 1`,
             Outlet_Type, `Outlet_Type_Grocery Store`))
 
+train_processed <- full_data[1:nrow(Train),]
+test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
+write_csv(train_processed, file = "train_processed.csv")
+write_csv(test_processed, file = "test_processed.csv")
 
 ########################################################
 ## Verifying that the processing worked well ##
@@ -96,4 +100,6 @@ full_data_visibility_sum <- full_data %>%
 
 full_data_visibility_sum
 ########################################################
+full_data %>% 
+  select(`Item_Type_Health and Hygiene`)
 
