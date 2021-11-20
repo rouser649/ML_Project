@@ -6,8 +6,8 @@ library(fastDummies)
 
 ############################
 #Read in data
-Test <- read_csv("Test.csv")
-Train <- read_csv("Train.csv")
+Test <- read_csv("Data/Test.csv")
+Train <- read_csv("Data/Train.csv")
 Test$Item_Outlet_Sales <- 0
 
 
@@ -126,6 +126,7 @@ mutate(Supermarket_Item_Hygiene=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_He
 train_processed <- full_data[1:nrow(Train),]
 test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
+dir.create("Data")
 write_csv(train_processed, file = "train_processed.csv")
 write_csv(test_processed, file = "test_processed.csv")
 
