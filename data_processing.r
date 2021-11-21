@@ -127,8 +127,8 @@ train_processed <- full_data[1:nrow(Train),]
 test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
 dir.create("Data")
-write_csv(train_processed, file = "train_processed.csv")
-write_csv(test_processed, file = "test_processed.csv")
+write_csv(train_processed, file = "Data/train_processed.csv")
+write_csv(test_processed, file = "Data/test_processed.csv")
 
 
 source("http://www.sthda.com/upload/rquery_cormat.r")
@@ -136,3 +136,15 @@ source("http://www.sthda.com/upload/rquery_cormat.r")
 library(corrplot)
 # rquery.cormat(full_data)
 # full_data
+
+train_val_size <- floor(0.75 * nrow(train_processed))
+set.seed(123)
+train_ind <- sample(seq_len(nrow(train_processed)), size = train_val_size)
+
+train_val <- train_processed[train_ind, ]
+test <- train_processed[-train_ind, ]
+
+write_csv(train_processed, file = "Data/train_val_processed.csv")
+write_csv(test_processed, file = "Data/test_from_train_processed.csv")
+
+
