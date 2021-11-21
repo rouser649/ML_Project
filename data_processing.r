@@ -144,7 +144,7 @@ train_ind <- sample(seq_len(nrow(train_processed)), size = train_val_size)
 train_val <- train_processed[train_ind, ]
 test <- train_processed[-train_ind, ]
 
-write_csv(train_processed, file = "Data/train_val_processed.csv")
-write_csv(test_processed, file = "Data/test_from_train_processed.csv")
+write_csv(train_val, file = "Data/train_val_processed.csv")
+write_csv(test, file = "Data/test_from_train_processed.csv")
 
 
