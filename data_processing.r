@@ -6,8 +6,8 @@ library(fastDummies)
 
 ############################
 #Read in data
-Test <- read_csv("Test.csv")
-Train <- read_csv("Train.csv")
+Test <- read_csv("Data/Test.csv")
+Train <- read_csv("Data/Train.csv")
 Test$Item_Outlet_Sales <- 0
 
 
@@ -68,7 +68,9 @@ full_data <- full_data_dummy %>%
             Outlet_Identifier, Outlet_Identifier_OUT010,
             Outlet_Size, Outlet_Size_Small,
             Outlet_Location_Type, `Outlet_Location_Type_Tier 1`,
-            Outlet_Type, `Outlet_Type_Grocery Store`))
+            Outlet_Type, `Outlet_Type_Grocery Store`,
+            Item_Identifier,
+            total_visibility, num_zero))
 
 
 
@@ -90,12 +92,13 @@ test_visibility_sum <- preprocessed_data %>%
   group_by(Outlet_Identifier) %>%            
   summarise(total_visibility = sum(Item_Visibility)) 
 
-full_data_visibility_sum <- full_data %>%
-  group_by(Outlet_Identifier) %>%            
-  summarise(total_visibility = sum(Item_Visibility)) 
-
-full_data_visibility_sum
+# full_data_visibility_sum <- full_data %>%
+#   group_by(Outlet_Identifier) %>%            
+#   summarise(total_visibility = sum(Item_Visibility)) 
+# 
+# full_data_visibility_sum
 ########################################################
+
 
 #Interaction Variables
 #do we need to center these first?
@@ -120,6 +123,28 @@ mutate(Supermarket_Item_Household=(`Outlet_Type_Supermarket Type1`)*Item_Type_Ho
 mutate(Supermarket_Item_Hygiene=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Health and Hygiene`) )
 
 
+train_processed <- full_data[1:nrow(Train),]
+test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
+
+dir.create("Data")
+write_csv(train_processed, file = "Data/train_processed.csv")
+write_csv(test_processed, file = "Data/test_processed.csv")
 
 
-write_csv(full_data, file="procesed_data")
+source("http://www.sthda.com/upload/rquery_cormat.r")
+
+library(corrplot)
+# rquery.cormat(full_data)
+# full_data
+
+train_val_size <- floor(0.75 * nrow(train_processed))
+set.seed(123)
+train_ind <- sample(seq_len(nrow(train_processed)), size = train_val_size)
+
+train_val <- train_processed[train_ind, ]
+test <- train_processed[-train_ind, ]
+
+write_csv(train_val, file = "Data/train_val_processed.csv")
+write_csv(test, file = "Data/test_from_train_processed.csv")
+
+
