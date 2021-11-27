@@ -95,7 +95,8 @@ function opt_visibility(store_mat, M, num_change)
 end
 
 ####################################################################################################################################
-store_mat_13 = CSV.read("Store/store_13.csv", DataFrame);
+### Store 13 ####
+store_mat_13 = CSV.read("Store/store_13_impute.csv", DataFrame);
 
 #### Unlimited Visibility Changes ####
 total_revenue, neg_cv_idx, pos_cv_idx, q, r = opt_visibility(store_mat_13, .05, 1000 )
@@ -106,3 +107,7 @@ total_revenue_baseline, neg_cv_idx_baseline, pos_cv_idx_baseline, q_baseline, r_
 
 #### Restrict to some visiblity change visibility change ####
 total_revenue_mid, neg_cv_idx_mid, pos_cv_idx_mid, q_mid, r_mid = opt_visibility(store_mat_13, .05, 50 );
+
+
+####################################################################################################################################
+### Store 13 ####

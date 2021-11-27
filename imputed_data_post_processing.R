@@ -39,5 +39,5 @@ test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
 
 write_csv(train_processed, file = "Data/train_val_optimpute.csv") #This will be read into stable reg impute
-write_csv(test_processed, file = "Data/test_from_train_optimpute.csv")
+write_csv(test_processed, file = "Data/test_optimpute.csv")
 

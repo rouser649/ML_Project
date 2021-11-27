@@ -15,10 +15,6 @@ Test$Item_Outlet_Sales <- 0
 preprocessed_data <- rbind(Train, Test)
 
 
-total_visibility_store <-  preprocessed_data %>%
-  group_by(Outlet_Identifier) %>%            
-  summarise(total_visibility = sum(Item_Visibility)) %>%
-  left_join(num_visibility_zero, by = "Outlet_Identifier")
 
 #Make all the missign visibilities equal to "missin" for julia.
 preprocessed_data <-  preprocessed_data %>% 

@@ -2,6 +2,7 @@
 
 library(readr)
 library(dplyr)
+library(tidyverse)
 library(fastDummies)
 
 ############################
@@ -38,7 +39,7 @@ getmode <- function(v) {
 #Clean data errors for item fat content
 full_data <- preprocessed_data %>% 
   left_join(total_visibility_store, by = "Outlet_Identifier") %>%
-  mutate(Item_Visibility = ifelse(Item_Visibility == 0, (1 - total_visibility)/num_zero, Item_Visibility )) %>% 
+  mutate(Item_Visibility = ifelse(Item_Visibility == 0, (100 - total_visibility)/num_zero, Item_Visibility ))%>% 
   mutate(Item_Fat_Content = ifelse(Item_Fat_Content == "low fat", "Low Fat",
                                    ifelse(Item_Fat_Content == "LF", "Low Fat",
                                           ifelse(Item_Fat_Content == "reg", "Regular", Item_Fat_Content) ))) %>% 
@@ -56,9 +57,9 @@ unique(full_data$Outlet_Size)
 ############################
 ## Adding Dummies ###
 
-full_data_dummy <-  dummy_cols(full_data, select_columns = c("Item_Type",
-                                                "Item_Fat_Content",
-                                                "Outlet_Identifier", 
+full_data_dummy <-  dummy_cols(full_data, select_columns = c("Outlet_Identifier",
+                                                "Item_Type",
+                                                "Item_Fat_Content", 
                                                 "Outlet_Size",
                                                 "Outlet_Location_Type",
                                                 "Outlet_Type")) 
@@ -92,9 +93,9 @@ test_visibility_sum <- preprocessed_data %>%
   group_by(Outlet_Identifier) %>%            
   summarise(total_visibility = sum(Item_Visibility)) 
 
-# full_data_visibility_sum <- full_data %>%
-#   group_by(Outlet_Identifier) %>%            
-#   summarise(total_visibility = sum(Item_Visibility)) 
+full_data_visibility_sum <- full_data %>%
+  group_by(Outlet_Identifier) %>%
+  summarise(total_visibility = sum(Item_Visibility))
 # 
 # full_data_visibility_sum
 ########################################################
@@ -120,31 +121,24 @@ mutate(Outlet_Size_Item_Everyday=Outlet_Size_Medium*(`Item_Type_Fruits and Veget
 mutate(Supermarket_Item_Everyday=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Fruits and Vegetables`)*Item_Type_Dairy*Item_Type_Breads) %>% 
 mutate(Supermarket_Item_Drinks=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Hard Drinks`))%>% 
 mutate(Supermarket_Item_Household=(`Outlet_Type_Supermarket Type1`)*Item_Type_Household) %>% 
-mutate(Supermarket_Item_Hygiene=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Health and Hygiene`) )
+mutate(Supermarket_Item_Hygiene=(`Outlet_Type_Supermarket Type1`)*(`Item_Type_Health and Hygiene`) ) %>% 
+
+mutate(Weight_Visibility = (Item_Weight * Item_Visibility),
+       Weight_MRP = Item_Weight * Item_MRP,
+       Visibility_MRP = Item_Visibility * Item_MRP)    
 
 
 train_processed <- full_data[1:nrow(Train),]
 test_processed <- full_data[(nrow(Train)+1):nrow(full_data),]
 
 dir.create("Data")
-write_csv(train_processed, file = "Data/train_processed.csv")
-write_csv(test_processed, file = "Data/test_processed.csv")
+write_csv(train_processed, file = "Data/train_val_processed.csv")
+write_csv(test_processed, file = "Data/test_processed.csv")     #Does not have sales. 
 
 
-source("http://www.sthda.com/upload/rquery_cormat.r")
-
-library(corrplot)
-# rquery.cormat(full_data)
-# full_data
-
-train_val_size <- floor(0.75 * nrow(train_processed))
-set.seed(123)
-train_ind <- sample(seq_len(nrow(train_processed)), size = train_val_size)
-
-train_val <- train_processed[train_ind, ]
-test <- train_processed[-train_ind, ]
-
-write_csv(train_val, file = "Data/train_val_processed.csv")
-write_csv(test, file = "Data/test_from_train_processed.csv")
 
 
+
+
+thirteen = Train %>% 
+  filter(Outlet_Identifier == "OUT013")
