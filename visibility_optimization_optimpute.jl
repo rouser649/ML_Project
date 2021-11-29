@@ -4,9 +4,9 @@ using Gurobi
 using JuMP
 using Formatting
 
-all_betas = CSV.read("Data/betas.csv", DataFrame, header = 0)
+all_betas = CSV.read("Data/betas_optimpute.csv", DataFrame, header = 0)
 beta0 = all_betas[1,1]
-betas = all_betas[2:64,1]
+betas = all_betas[2:size(all_betas)[1],1]
 
 function opt_visibility(store_mat, M, num_change)
 

@@ -4,7 +4,7 @@ using Gurobi
 using JuMP
 using Formatting
 
-all_betas = CSV.read("Data/betas.csv", DataFrame, header = 0)
+all_betas = CSV.read("Data/betas_naive.csv", DataFrame, header = 0)
 beta0 = all_betas[1,1]
 betas = all_betas[2:64,1]
 
@@ -102,7 +102,7 @@ total_revenue, neg_cv_idx, pos_cv_idx, q, r = opt_visibility(store_mat_13, .05, 
 
 
 #### Restrict to no visibility change ####
-total_revenue_baseline, neg_cv_idx_baseline, pos_cv_idx_baseline, q_baseline, r_baseline = opt_visibility(store_mat_13, .05, 0 );
+total_revenue_baseline, neg_cv_idx_baseline, pos_cv_idx_baseline, q_baseline, r_baseline = opt_visibility(store_mat_13, .05, 0 )
 
 #### Restrict to some visiblity change visibility change ####
 total_revenue_mid, neg_cv_idx_mid, pos_cv_idx_mid, q_mid, r_mid = opt_visibility(store_mat_13, .05, 50 );
